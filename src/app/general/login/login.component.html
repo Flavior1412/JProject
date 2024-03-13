@@ -1,0 +1,31 @@
+<div class="login-container">
+  @if(!isLoggedIn){
+  <form name="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">User Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="userName"
+        [(ngModel)]="loginForm.userName"
+        required
+        [ngModelOptions]="{standalone: true}"
+        #username="ngModel"
+      />
+    </div>
+    <div class="form-group">
+      <label for="passWord">Pass Work</label>
+      <input
+        type="text"
+        class="form-control"
+        nmae="passWord"
+        [(ngModel)]="loginForm.passWord"
+        required
+        [ngModelOptions]="{standalone: true}"
+        #passWord="ngModel"
+      />
+    </div>
+    <div class="form-group"><button class="btn btn-login">Login</button></div>
+  </form>
+  }
+</div>
