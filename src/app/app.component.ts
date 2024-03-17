@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { StorageService } from './services/storage.service';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent {
   showAdminBoard: boolean = false;
   constructor(
     private storageService: StorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
@@ -23,6 +25,11 @@ export class AppComponent {
       const user = this.storageService.getUser();
       this.roles = user.roles;
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      if(this.showAdminBoard){
+        this.router.navigateByUrl('/admin');
+      } else{
+        this.router.navigateByUrl('/home')
+      } 
     }
   }
 
