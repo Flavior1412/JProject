@@ -19,17 +19,22 @@ export class HttpRequestInterceptor implements HttpInterceptor {
       withCredentials: true,
     });
     let ok: string;
-    return next.handle(req).pipe(tap({
-      next:(event) => (event instanceof HttpResponse? this.handleEventResponse(event) : ''),
-      error: (err) => (this.handleError(err))
-    }));
+    return next.handle(req).pipe(
+      tap({
+        next: (event) =>
+          event instanceof HttpResponse ? this.handleEventResponse(event) : '',
+        error: (err) => this.handleError(err),
+      })
+    );
   }
   handleError(err: any): void {
-    console.log('err', err);
+    if (err.status === 404) {
+      alert(err.error.message);
+    }
   }
- 
+
   handleEventResponse(event: HttpResponse<any>): void {
-   console.log('ress:', event);
+    console.log('ress:', event);
   }
 }
 
@@ -40,4 +45,3 @@ export const httpInterceptorProviders = [
     multi: true,
   },
 ];
-
