@@ -4,9 +4,10 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
@@ -17,7 +18,23 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     req = req.clone({
       withCredentials: true,
     });
-    return next.handle(req);
+    let ok: string;
+    return next.handle(req).pipe(
+      tap({
+        next: (event) =>
+          event instanceof HttpResponse ? this.handleEventResponse(event) : '',
+        error: (err) => this.handleError(err),
+      })
+    );
+  }
+  handleError(err: any): void {
+    if (err.status === 404) {
+      alert(err.error.message);
+    }
+  }
+
+  handleEventResponse(event: HttpResponse<any>): void {
+    console.log('ress:', event);
   }
 }
 
